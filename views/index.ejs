@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %></title>
+
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css' />
+    <style>
+    #making, #visit {
+      text-align:center;
+      padding:1%;
+    }
+    </style>
+
+  </head>
+  <body>
+
+    <div class="page-header" style="text-align:center;" >
+    <h1  style="color:red"><%= title %></h1>
+    <h1><small>Enjoy convenient business with <%= title %>!!</small></h1>
+    </div>
+
+  <div style="text-align:center; color:green;"><h4>새로 시작하시겠습니까? <br></h3><h5><%= alert1 %></h5></div>
+
+    <div id="making">
+      <form action="/making" method="post">
+        <input type="text" name="roomname" id="roomname" required/>
+        <button type="submit" class="btn btn-default">만들기</button>
+        </form>
+        <div id="errormessage"></div>
+    </div>
+
+    <div style="text-align:center; color:green;"><h4>기존에 만들어두신 방으로 입장하시겠습니까?<br></h3></div>
+
+    <div id="visit">
+      <form action="/visit" method="post">
+        <input type="text" name="roomname" id="roomname" required/>
+        <button type="submit" class="btn btn-default">입장</button>
+        </form>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </head>
+  <script language='javascript'>
+    window.setTimeout('window.location.reload()',60000); 
+    </script>
+  
+  <body>
+        <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                    <a class="navbar-brand" href="/visited/<%= number %>"><%= name %></a>
+
+                  </div>
+
+                  <div>
+                    <ul class="nav nav-tabs">
+                      <li role="presentation" class="active"><a href="/visited/<%= number %>">Home</a></li>
+                      <li role="presentation"><a href="/visited/<%= number %>/notice">Notice</a></li>
+                      <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> 
+                      <li role="presentation"><a href="/visited/<%= number %>/maps">Maps</a></li>
+                      <a class="navbar-right" href="/">Helpusiness</a> 
+                    </ul>
+
+                  </div>
+
+                </div>
+              </nav>
+
+              <!-- 여기부터 메인-->
+              <div class="page-header"><h1><%= title %></h1></div>
+
+              <form class="form-inline" action="/index/chat" method="post">
+                <input class="form-control" type="text" name="content" id="content" value="" required/>
+                            <button class=" btn btn-default" type="submit" onClick="refreshPage()">글쓰기</button>
+
+            </form>
+
+              <table class="table table-hover">
+                <tr>
+                    <td>내용</td>
+                    <td align="right">작성시간</td>
+                </tr>
+                
+                <%
+                a=rows2.length-1;
+                for(i=a; i>=0; i--)
+                {
+                    var data = rows2[i];
+                %>
+                <tr>
+                    <td><%=data.content%></td>
+                    <td align="right"><%=data.writetime%></td>
+                </tr>
+                <%}%>
+
+            </table>
+                
+
+
+              </div>
+
+  </body>
+</html>
