@@ -35,5 +35,7 @@ Node.js를 사용한 보급형 비즈니스 사이트 개발
 4) 본문 생략
 
 5) 구현 
+<div>
 <img src="https://user-images.githubusercontent.com/60211250/73131764-43f85480-4054-11ea-9c35-dda95426a991.png" width="90%"></img>
 <img src="https://user-images.githubusercontent.com/60211250/73131770-596d7e80-4054-11ea-82d5-738aafb75fb5.png" width="90%"></img>
+</div>
