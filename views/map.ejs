@@ -4,7 +4,33 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css' />
-  <title>Kakao 지도 시작하기</title>
+  <title><%= name%> maps</title>
+
+  <!-- 두개의 submit -->
+  <script type="text/javascript">
+  </script>
+  <script language="javascript">
+    function savecontrol(action){
+      if (action==1){ document.save.action="/visited/<%= number%>/mapcenter"; alert('회사 위치가 저장되었습니다.');}
+      if (action==2){ document.save.action="/visited/<%= number%>/savemarker"; alert('마커가 저장되었습니다.');}
+      if (action==3) { document.save.action="/visited/<%= number%>/deletemarker"; alert('마커가 삭제되었습니다.');}
+      document.save.submit();
+    }
+    function savecontent(action){
+      if (action==1) {
+        if( document.getElementById('number2').value=='') { alert('마커를 선택 후 저장해주세요.'); }
+        else {document.writecontent.action="/visited/<%= number%>/savecontent"; alert('내용이 저장되었습니다.'); document.writecontent.submit();}
+
+      }
+      if (action==2) {
+        if( document.getElementById('number2').value=='') { alert('마커를 선택 후 저장해주세요.'); }
+        else { document.writecontent.action="/visited/<%= number%>/deletecontent"; alert('내용이 삭제되었습니다.'); document.writecontent.submit();}
+ 
+      }
+      
+    }
+
+  </script>
   
   <style>
     html, body {width:100%;height:100%;margin:0;padding:0;} 
@@ -37,9 +63,9 @@
                     <ul class="nav nav-tabs">
                       <li role="presentation"><a href="/visited/<%= number %>">Home</a></li>
                       <li role="presentation"><a href="/visited/<%= number %>/notice">Notice</a></li>
-                      <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> 
+                  <!--    <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> -->
                       <li role="presentation" class="active"><a href="/visited/<%= number %>/maps">Maps</a></li> 
-                      <a class="navbar-right" href="/"></a> 
+                      <a class="navbar-right" href="/">Helpusiness</a> 
                     </ul>
                   </div>
                 </div>
@@ -48,11 +74,7 @@
         
         <div class="map_wrap">
           <div id="map" style="border:1px black solid;width:100%;height:100%;position:relative;overflow:hidden;"></div> 
-          <!-- 지도타입 컨트롤 div 입니다 -->
-          <div class="custom_typecontrol radius_border">
-              <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
-              <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
-          </div>
+
           <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
           <div class="custom_zoomcontrol radius_border"> 
               <span onclick="zoomIn()"><img src="http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
@@ -62,36 +84,143 @@
       
       <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7a269944192504d7fcd74c3a204ff884"></script>
       <script>
-      var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        //자회사 표시, 저장안되있을 경우 경복궁 표시 
+      var mapContainer = document.getElementById('map'),
           mapOption = { 
-              center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-              level: 3 // 지도의 확대 레벨
+              center: new kakao.maps.LatLng(<%= xl%>, <%= yl%>),
+              level: 3
           };  
       
-      var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-      var marker=new kakao.maps.Marker({
-        position:map.getCenter()
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+
+      //자회사 마커 , 이미지 변화 주면 좋겠다
+      var Memarker=new kakao.maps.Marker({
+        position:map.getCenter(),
+        image:new kakao.maps.MarkerImage('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', new kakao.maps.Size(64, 69), {offset: new kakao.maps.Point(27, 69)})
       });
-      marker.setMap(map);
-      // 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
+
+
+
       function zoomIn() {
           map.setLevel(map.getLevel() - 1);
       }
-      
-      // 지도 확대, 축소 컨트롤에서 축소 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
       function zoomOut() {
           map.setLevel(map.getLevel() + 1);
       }
-      marker.setMap(map);
+      Memarker.setMap(map);
 
+
+      var infowindow = new kakao.maps.InfoWindow({
+        content : '<div style="padding:5px;"><%= name%></div>',
+        removable : true
+    });
+    
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(Memarker, 'click', function() {
+          // 마커 위에 인포윈도우를 표시합니다
+          infowindow.open(map, Memarker);  
+    });
+
+
+      //aa
+      // db 저장된 마커 
+
+      <%
+    for(var i=0; i<rows.length; i++)
+    {
+        var markerdb = rows[i];
+    %>
+
+      var savemarkers = new kakao.maps.Marker({
+        number : <%=markerdb.number%>,
+        map : map,
+        position : new kakao.maps.LatLng(<%=markerdb.xl%>, <%=markerdb.yl%>),
+        
+      });
+      var infowindow2 = new kakao.maps.InfoWindow({
+        content : '<div style="paddin:5px;">' + '<%=markerdb.content%>' + '</div>',
+        removable : true
+      });
+ //     console.log('<%=markerdb.content%>')
+      savemarkers.setMap(map);
+
+      kakao.maps.event.addListener(savemarkers, 'click', function(){
+        document.getElementById('xl').value = <%=markerdb.xl%> + '';
+        document.getElementById('yl').value = <%=markerdb.yl%> + '';
+        document.getElementById('number').value = <%=markerdb.number%> + '';
+        document.getElementById('number2').value = <%=markerdb.number%> + '';
+
+    //   console.log(document.getElementById('xl').value);
+      });
+      kakao.maps.event.addListener(savemarkers, 'mouseover', makeOverListener(map, savemarkers, infowindow2));
+      kakao.maps.event.addListener(savemarkers, 'mouseout', makeOutListener(infowindow2));
+      function makeOverListener(map, savemarkers, infowindow2) {
+        return function() {
+            infowindow2.open(map, savemarkers);
+        };
+    }
+    
+    function makeOutListener(infowindow2) {
+        return function() {
+            infowindow2.close();
+        };
+    }
+      <%}%>
+
+
+
+// 화면 가운데 제어 스크립트
+      
+
+
+
+        //화면 가운데 좌표 찍히는 스크립트
+        var centerMarker = new kakao.maps.Marker({
+          map : map,
+          position : new kakao.maps.LatLng(map.getCenter())
+        });
+        centerMarker.setMap(map);
+
+
+
+      kakao.maps.event.addListener(map, 'dragend', function() {        
+    
+        var latlng = map.getCenter(); 
+        
+        var xl = document.getElementById('xl');
+        var yl = document.getElementById('yl');
+
+        xl.value = '' + latlng.getLat();
+        yl.value = '' + latlng.getLng();
+        
+        //화면 가운데 마커 표시
+      
+        centerMarker.setPosition(latlng);
+    });
+    
       </script>
 
-      <div class="map_btn">
-        <button class="btn btn-default">우리회사</button>
-        <button class="btn btn-default">마크 추가</button>
-        <button class="btn btn-default">내용 추가</button>
-        <button class="btn btn-danger">삭제</button>
+      <div class="map_btn" style="display:inline-block">
+
+        <form name="save" method="post" action="">
+          <input name="xl" id="xl" style="display:none;" required/>
+          <input name="yl" id="yl" style="display:none;" required/>
+          <input name="number" id="number" style="display:none;" required/>
+          <input type="button" class="btn btn-default" value="우리회사저장" onclick="savecontrol(1)"/>
+          <input type="button" class="btn btn-default" value="마커저장" onclick="savecontrol(2)"/>
+          <input type="button" class="btn btn-danger" value="마커삭제" onclick="savecontrol(3)"/>
+        </form>
+
+        <form name="writecontent" method="post" action="">
+          <input name="content" id="content" width="10em" required />
+          <input name="number2" id="number2" style="display:none;" required/>
+          <input type="button" class="btn btn-default" value="내용추가" onclick="savecontent(1)"></button>
+          <input type="button" class="btn btn-danger" value="내용삭제" onclick="savecontent(2)"></button>
+        </form>
+        
+        
       </div>
+      <p id="result"></p>
     
 </div>
 </body>

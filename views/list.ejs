@@ -18,7 +18,7 @@
                     <ul class="nav nav-tabs">
                       <li role="presentation"><a href="/visited/<%= number %>">Home</a></li>
                       <li role="presentation"class="active"><a href="/visited/<%= number %>/notice">Notice</a></li>
-                      <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> 
+                  <!--    <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> -->
                       <li role="presentation"><a href="/visited/<%= number %>/maps">Maps</a></li> 
                       <a class="navbar-right" href="/">Helpusiness</a> 
                     </ul>
@@ -28,7 +28,7 @@
 
               <!-- 메인 -->
 <h1 class="text-center"><%= title %></h1>
-<p class="text-right"><a href="/board/write" class="btn btn-success" >글쓰기</a></p>
+<p class="text-right"><a href="/visited/<%= number %>/write" class="btn btn-success" >글쓰기</a></p>
 <div class="container">
 <table class="table table-hover">
     <tr>
@@ -43,6 +43,7 @@
     for(var i=0; i<rows.length; i++)
     {
         var data = rows[i];
+        
     %>
     <tr>
         <td><%=data.idx%></td>

@@ -8,7 +8,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
   </head>
   <script language='javascript'>
-    window.setTimeout('window.location.reload()',60000); 
     </script>
   
   <body>
@@ -23,7 +22,7 @@
                     <ul class="nav nav-tabs">
                       <li role="presentation" class="active"><a href="/visited/<%= number %>">Home</a></li>
                       <li role="presentation"><a href="/visited/<%= number %>/notice">Notice</a></li>
-                      <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> 
+                  <!--    <li role="presentation"><a href="/visited/<%= number %>/checklist">Check List</a></li> -->
                       <li role="presentation"><a href="/visited/<%= number %>/maps">Maps</a></li>
                       <a class="navbar-right" href="/">Helpusiness</a> 
                     </ul>
@@ -36,9 +35,9 @@
               <!-- 여기부터 메인-->
               <div class="page-header"><h1><%= title %></h1></div>
 
-              <form class="form-inline" action="/index/chat" method="post">
+              <form class="form-inline" action="/visited/<%= number %>/chatmaking" method="post">
                 <input class="form-control" type="text" name="content" id="content" value="" required/>
-                            <button class=" btn btn-default" type="submit" onClick="refreshPage()">글쓰기</button>
+                            <button class=" btn btn-default" type="submit">글쓰기</button>
 
             </form>
 
